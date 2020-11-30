@@ -7,13 +7,15 @@ project(myapp
 )
 
 add_executable(myapp ${SOURCE_FILES})
-target_sources(myapp PRIVATE src/main.cpp src/shader.h)
+target_sources(myapp PRIVATE src/main.cpp src/shader.h src/window.h src/window.cpp)
 
 set_target_properties(myapp PROPERTIES
     CMAKE_CXX_STANDARD 14
     CMAKE_CXX_STANDARD_REQUIRED ON
+    CMAKE_CXX_EXTENSIONS OFF
     CMAKE_CXX_FLAGS "-Wfatal-errors -Wall -Werror -Wextra -pedantic -Wno-unused-parameter"
 )
+target_compile_features(myapp PRIVATE cxx_std_14)
 
 #{ GLAD
 add_subdirectory(thirdparty/glad)
