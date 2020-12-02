@@ -40,9 +40,7 @@ void handleMouse(GLFWwindow *window, double xPos, double yPos) {
     mainWindow->lastY = yPos;
 }
 
-void framebuffer_size_callback(__attribute__((unused)) GLFWwindow *window, int width, int height) {
-    glViewport(0, 0, width, height);
-}
+void framebuffer_size_callback(GLFWwindow * /* window */, int width, int height) { glViewport(0, 0, width, height); }
 
 Window::Window(GLint wwindowWidth, GLint wwindowHeight) : windowWidth{wwindowWidth}, windowHeight{wwindowHeight} {
     keys.fill(false);
