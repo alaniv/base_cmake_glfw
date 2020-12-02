@@ -6,7 +6,7 @@ project(myapp
     LANGUAGES CXX C
 )
 
-add_executable(myapp ${SOURCE_FILES})
+add_executable(myapp)
 target_sources(myapp PRIVATE src/main.cpp src/shader.h src/window.h src/window.cpp)
 
 set_target_properties(myapp PROPERTIES
@@ -33,4 +33,15 @@ target_link_libraries(myapp glfw)
 #{ OPENGL
 find_package(OpenGL REQUIRED)
 target_link_libraries(myapp OpenGL::GL)
+#}
+
+#{ GOOGLE TEST MOCK
+add_subdirectory(thirdparty/googletest-master)
+target_link_libraries(myapp gmock)
+target_link_libraries(myapp gtest)
+
+enable_testing()
+add_executable(runUnitTests)
+target_sources(runUnitTests PRIVATE test/testExample.cpp)
+target_link_libraries(runUnitTests gtest gtest_main)
 #}
