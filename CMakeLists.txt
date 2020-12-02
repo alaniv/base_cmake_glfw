@@ -13,7 +13,7 @@ set_target_properties(myapp PROPERTIES
     CMAKE_CXX_STANDARD 14
     CMAKE_CXX_STANDARD_REQUIRED ON
     CMAKE_CXX_EXTENSIONS OFF
-    CMAKE_CXX_FLAGS "-Wfatal-errors -Wall -Werror -Wextra -pedantic -Wno-unused-parameter"
+    CMAKE_CXX_FLAGS "-Wfatal-errors -Wall -Werror -Wextra -pedantic"
 )
 target_compile_features(myapp PRIVATE cxx_std_14)
 
