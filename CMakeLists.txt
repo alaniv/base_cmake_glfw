@@ -7,7 +7,7 @@ project(myapp
 )
 
 add_executable(myapp)
-target_sources(myapp PRIVATE src/main.cpp src/shader.h src/window.h src/window.cpp)
+target_sources(myapp PRIVATE src/main.cpp src/Shader.h src/Shader.cpp src/window.h src/window.cpp src/Mesh.h src/Mesh.cpp)
 
 set_target_properties(myapp PROPERTIES
     CMAKE_CXX_STANDARD 14

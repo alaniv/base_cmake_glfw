@@ -1,43 +1,27 @@
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <vector>
 
-#include <iostream>
 #include "Window.h"
-#include "shader.h"
+#include "Shader.h"
+#include "Mesh.h"
 
-#define BUFFER_OFFSET(a) ((void *)(a))
-
-void processInput(GLFWwindow *window);
-
-enum VAO_IDs { Triangles, NumVAOs };
-enum Buffer_IDs { ArrayBuffer, NumBuffers };
-enum Attrib_IDs { vPosition = 0 };
-
-GLuint VAOs[NumVAOs];
-GLuint Buffers[NumBuffers];
-
-const GLuint NumVertices = 6;
+std::vector<Mesh *> meshList;
 
 void init() {
-    glGenVertexArrays(NumVAOs, VAOs);
-    glBindVertexArray(VAOs[Triangles]);
-    GLfloat vertices[NumVertices][2] = {{-0.90, -0.90}, {0.85, -0.90}, {-0.90, 0.85},
-                                        {0.90, -0.85},  {0.90, 0.90},  {-0.85, 0.90}};
-    glGenBuffers(NumBuffers, Buffers);
-    glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    GLfloat vertices[] = {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f};
+    GLuint indices[] = {0, 3, 1, 1, 3, 2, 2, 3, 0, 0, 1, 2};
+
+    Mesh *obj1 = new Mesh(vertices, indices, 12, 12);
+    meshList.push_back(obj1);
 
     Shader ourShader("./media/triangles.vert", "./media/triangles.frag");
     ourShader.use();
-
-    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(vPosition);
 }
 
 void display() {
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindVertexArray(VAOs[Triangles]);
-    glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+    meshList[0]->renderMesh();
     glFlush();
 }
 

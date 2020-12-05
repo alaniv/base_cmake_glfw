@@ -3,17 +3,15 @@
 #include <stdexcept>
 #include <GLFW/glfw3.h>
 
-namespace {
-class AppGlfwError : public std::runtime_error {
+class WindowError : public std::runtime_error {
   public:
-    AppGlfwError(const std::string &message) : std::runtime_error(std::string("ERROR: ") + message) { glfwTerminate(); }
+    WindowError(const std::string &message) : std::runtime_error(std::string("ERROR::WINDOW:: ") + message) {}
 };
-} // namespace
 
 void handleKeys(GLFWwindow *window, int key, int code, int action, int mode) {
     Window *mainWindow = static_cast<Window *>(glfwGetWindowUserPointer(window));
     if (mainWindow == nullptr)
-        throw AppGlfwError(std::string("Window handleKeys: glfwGetWindowUserPointer error."));
+        throw WindowError(std::string("handleKeys: glfwGetWindowUserPointer error."));
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     if (key >= 0 && key < 1024) {
@@ -28,7 +26,7 @@ void handleKeys(GLFWwindow *window, int key, int code, int action, int mode) {
 void handleMouse(GLFWwindow *window, double xPos, double yPos) {
     Window *mainWindow = static_cast<Window *>(glfwGetWindowUserPointer(window));
     if (mainWindow == nullptr)
-        throw AppGlfwError(std::string("Window handleMouse: glfwGetWindowUserPointer error."));
+        throw WindowError(std::string("handleMouse: glfwGetWindowUserPointer error."));
     if (!mainWindow->mouseFirstMoved) {
         mainWindow->lastX = xPos;
         mainWindow->lastY = yPos;
@@ -45,7 +43,7 @@ void framebuffer_size_callback(GLFWwindow * /* window */, int width, int height)
 Window::Window(GLint wwindowWidth, GLint wwindowHeight) : windowWidth{wwindowWidth}, windowHeight{wwindowHeight} {
     keys.fill(false);
     if (!glfwInit())
-        throw AppGlfwError(std::string("Window: glfwInit error."));
+        throw WindowError(std::string("glfwInit error."));
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -54,7 +52,7 @@ Window::Window(GLint wwindowWidth, GLint wwindowHeight) : windowWidth{wwindowWid
 #endif
     mainWindow = glfwCreateWindow(windowWidth, windowHeight, WINDOW_TITLE, nullptr, nullptr);
     if (mainWindow == nullptr)
-        throw AppGlfwError(std::string("Window: glfwCreateWindow error."));
+        throw WindowError(std::string("glfwCreateWindow error."));
     glfwMakeContextCurrent(mainWindow);
     glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
 
@@ -64,7 +62,7 @@ Window::Window(GLint wwindowWidth, GLint wwindowHeight) : windowWidth{wwindowWid
     glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // hides cursor
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-        throw AppGlfwError(std::string("Window: gladLoadGLLoader error."));
+        throw WindowError(std::string("gladLoadGLLoader error."));
 
     glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, bufferWidth, bufferHeight);
