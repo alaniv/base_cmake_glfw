@@ -22,6 +22,11 @@ add_subdirectory(thirdparty/glad)
 target_link_libraries(myapp glad)
 #}
 
+#{ GLM
+add_subdirectory(thirdparty/glm-master)
+target_link_libraries(myapp glm)
+#}
+
 #{ glfw3 settings
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
