@@ -27,4 +27,4 @@ bld/
 # Add this line
 out/
 
-build/
+build/[!media]*
