@@ -26,5 +26,5 @@ bld/
 [Ll]ogs/
 # Add this line
 out/
-
-build/[!media]*
+build/*
+!build/media*
