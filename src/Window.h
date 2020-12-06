@@ -24,12 +24,15 @@ class Window {
         xChange = 0.0f;
         return theChange;
     }
-    
+
     GLfloat getYChange() {
         GLfloat theChange = yChange;
         yChange = 0.0f;
         return theChange;
     }
+
+    GLfloat getBufferWidth() { return static_cast<GLfloat>(bufferWidth); }
+    GLfloat getBufferHeight() { return static_cast<GLfloat>(bufferHeight); }
 
   private:
     GLFWwindow *mainWindow;
