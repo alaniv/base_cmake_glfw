@@ -1,7 +1,5 @@
 #include <glad/glad.h>
-#include <vector>
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -10,28 +8,27 @@
 #include "DeltaTime.hpp"
 #include "BoxGameObject.hpp"
 
+void render(BoxGameObject& box, const glm::mat4& projection, const glm::mat4& view) {
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    box.render(projection, view);
+    glFlush();
+}
+
 int main(int /*argc*/, char ** /*argv*/) {
-    Camera camera{glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f};
     Window window{};
+    Camera camera{glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f, window};
     DeltaTime dt{};
     BoxGameObject box{};
 
-    glm::mat4 projection = glm::perspective(45.0f, window.getAsepct(), 0.1f, 100.0f);
+    glm::mat4 projection{camera.calculateProjectionMatrix()};
 
     while (!window.shouldClose()) {
         dt.tick();
-        camera.keyControl(window.getKeys(), dt);
-        camera.mouseControl(window.getXChange(), window.getYChange());
-
+        camera.update(dt);
         window.swapBuffers();
-
-        const glm::mat4 &view = camera.calculateViewMatrix();
-
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        box.render(projection, view);
-        glFlush();
-
+        glm::mat4 view{camera.calculateViewMatrix()};
+        render(box, projection, view);
         window.pollEvents();
     }
     return 0;
