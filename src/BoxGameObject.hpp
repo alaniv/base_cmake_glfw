@@ -29,9 +29,10 @@ GLuint indices[]{
 class BoxGameObject {
     std::unique_ptr<Mesh> ourMesh;
     std::unique_ptr<Shader> ourShader;
+    glm::vec3 position;
 
   public:
-    BoxGameObject() {
+    BoxGameObject() : position{glm::vec3(0.2f, 0.2f, 0.2f)} {
         ourMesh = std::make_unique<Mesh>(vertices, indices, 24, 36);
         ourShader = std::make_unique<Shader>("./media/triangles.vert", "./media/triangles.frag");
     }
@@ -43,8 +44,7 @@ class BoxGameObject {
         GLuint uniformModel = ourShader->uniformModel;
         GLuint uniformView = ourShader->uniformView;
 
-        glm::mat4 model(1.0f);
-        model = glm::translate(model, glm::vec3(0.2f, 0.2f, 0.2f));
+        glm::mat4 model{glm::translate(glm::mat4(1.0f), position)};
 
         glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(view));
