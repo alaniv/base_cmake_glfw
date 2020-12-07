@@ -12,6 +12,7 @@ src/Shader.cpp
 src/window.cpp 
 src/Mesh.cpp
 src/Camera.cpp
+src/Texture.cpp
 )
 
 set_target_properties(myapp PROPERTIES
@@ -30,6 +31,11 @@ target_link_libraries(myapp glad)
 #{ GLM
 add_subdirectory(thirdparty/glm-master)
 target_link_libraries(myapp glm)
+#}
+
+#{ STB
+add_subdirectory(thirdparty/stb)
+target_link_libraries(myapp stb)
 #}
 
 #{ glfw3 settings

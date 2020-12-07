@@ -4,18 +4,19 @@
 
 #include "Shader.h"
 #include "Mesh.h"
+#include "Texture.h"
 #include <memory>
 #include <glm/gtc/type_ptr.hpp>
 
 GLfloat vertices[]{
-    -1.0f, -1.0f, -1.0f, //
-    1.0f,  -1.0f, -1.0f, //
-    -1.0f, 1.0f,  -1.0f, //
-    1.0f,  1.0f,  -1.0f, //
-    -1.0f, -1.0f, 1.0f,  //
-    1.0f,  -1.0f, 1.0f,  //
-    -1.0f, 1.0f,  1.0f,  //
-    1.0f,  1.0f,  1.0f,  //
+    -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, //
+    1.0f,  -1.0f, -1.0f, 1.0f, 0.0f, //
+    -1.0f, 1.0f,  -1.0f, 0.0f, 1.0f, //
+    1.0f,  1.0f,  -1.0f, 1.0f, 1.0f, //
+    -1.0f, -1.0f, 1.0f,  1.0f, 0.0f, //
+    1.0f,  -1.0f, 1.0f,  1.0f, 1.0f, //
+    -1.0f, 1.0f,  1.0f,  0.0f, 1.0f, //
+    1.0f,  1.0f,  1.0f,  1.0f, 0.0f, //
 };
 GLuint indices[]{
     0, 1, 2, 1, 2, 3, //
@@ -29,17 +30,20 @@ GLuint indices[]{
 class BoxGameObject {
     std::unique_ptr<Mesh> ourMesh;
     std::unique_ptr<Shader> ourShader;
+    std::unique_ptr<Texture> ourTexture;
     glm::vec3 position;
 
   public:
     BoxGameObject() : position{glm::vec3(0.2f, 0.2f, 0.2f)} {
-        ourMesh = std::make_unique<Mesh>(vertices, indices, 24, 36);
+        ourMesh = std::make_unique<Mesh>(vertices, indices, 40, 36);
         ourShader = std::make_unique<Shader>("./media/triangles.vert", "./media/triangles.frag");
+        ourTexture = std::make_unique<Texture>("./media/brick.png");
+        ourTexture->loadTexture();
     }
     void render(const glm::mat4 &projection, const glm::mat4 &view) {
 
         ourShader->use();
-
+        ourTexture->useTexture();
         GLuint uniformProjection = ourShader->uniformProjection;
         GLuint uniformModel = ourShader->uniformModel;
         GLuint uniformView = ourShader->uniformView;
