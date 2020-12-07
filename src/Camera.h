@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <vector>
 
 class Camera {
   public:
@@ -10,13 +11,13 @@ class Camera {
     Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMovementSpeed,
            GLfloat startTurnSpeed);
     ~Camera();
-    void keyControl(const bool *keys, GLfloat deltaTime);
+    void keyControl(const std::vector<int> &keys, GLfloat deltaTime);
     void mouseControl(GLfloat xChange, GLfloat yChange);
     glm::mat4 calculateViewMatrix();
     glm::vec3 getCameraPosition();
 
   private:
-    glm::vec3 position, front, up, right, worldUp;
+    glm::vec3 front, right, up, position, worldUp;
     GLfloat yaw, pitch; // no roll
     GLfloat movementSpeed, turnSpeed;
 

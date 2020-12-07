@@ -1,21 +1,12 @@
 #include "Camera.h"
 #include <GLFW/glfw3.h>
-
-Camera::Camera() {}
-
-glm::vec3 Camera::getCameraPosition(){
-    return position;
-}
+#include <iostream>
 
 Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch,
-               GLfloat startMovementSpeed, GLfloat startTurnSpeed) {
-    position = startPosition;
-    worldUp = startUp;
-    yaw = startYaw;
-    pitch = startPitch;
-    front = glm::vec3(0.0f, 0.0f, -1.0f);
-    movementSpeed = startMovementSpeed;
-    turnSpeed = startTurnSpeed;
+               GLfloat startMovementSpeed, GLfloat startTurnSpeed)
+    : position{startPosition}, worldUp{startUp}, yaw{startYaw}, pitch{startPitch},
+      movementSpeed{startMovementSpeed}, turnSpeed{startTurnSpeed}
+{
     update();
 }
 
@@ -31,20 +22,16 @@ void Camera::update() {
     up = glm::normalize(glm::cross(right, front));
 }
 
-void Camera::keyControl(const bool *keys, GLfloat deltaTime) {
+void Camera::keyControl(const std::vector<int> &keys, GLfloat deltaTime) {
     GLfloat vel = deltaTime * movementSpeed;
-    if (keys[GLFW_KEY_W]) {
+    if (keys[GLFW_KEY_W])
         position += front * vel;
-    }
-    if (keys[GLFW_KEY_S]) {
+    if (keys[GLFW_KEY_S])
         position -= front * vel;
-    }
-    if (keys[GLFW_KEY_A]) {
+    if (keys[GLFW_KEY_A])
         position -= right * vel;
-    }
-    if (keys[GLFW_KEY_D]) {
+    if (keys[GLFW_KEY_D])
         position += right * vel;
-    }
 }
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange) {
@@ -54,8 +41,10 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange) {
     yaw += xChange;
     pitch += yChange;
 
-    glm::clamp(pitch, -89.0f, 89.0f);
+    pitch = glm::clamp(pitch, -45.0f, 45.0f);
     update();
 }
 
 glm::mat4 Camera::calculateViewMatrix() { return glm::lookAt(position, position + front, up); }
+
+glm::vec3 Camera::getCameraPosition() { return position; }

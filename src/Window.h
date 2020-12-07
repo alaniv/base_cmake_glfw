@@ -1,12 +1,10 @@
 #pragma once
 
-#include <array>
+#include <vector>
 #include <glad/glad.h>
 
 class GLFWwindow;
 
-constexpr GLint WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
-constexpr char WINDOW_TITLE[] = "LearnOpenGL";
 
 class Window {
   public:
@@ -17,7 +15,7 @@ class Window {
     void swapBuffers();
     void pollEvents();
 
-    const bool *getKeys() { return keys.data(); }
+    const std::vector<int>& getKeys() { return keys; }
 
     GLfloat getXChange() {
         GLfloat theChange = xChange;
@@ -31,15 +29,20 @@ class Window {
         return theChange;
     }
 
-    GLfloat getBufferWidth() { return static_cast<GLfloat>(bufferWidth); }
-    GLfloat getBufferHeight() { return static_cast<GLfloat>(bufferHeight); }
+    // GLfloat getBufferWidth() { return static_cast<GLfloat>(bufferWidth); }
+    // GLfloat getBufferHeight() { return static_cast<GLfloat>(bufferHeight); }
+    GLfloat getAsepct() { return static_cast<GLfloat>(bufferWidth) / static_cast<GLfloat>(bufferHeight); }
 
   private:
+    static constexpr const char* WINDOW_TITLE = "LearnOpenGL";
+    static constexpr GLint WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
+
     GLFWwindow *mainWindow;
     GLint windowWidth, windowHeight;
     int bufferWidth, bufferHeight;
 
-    std::array<bool, 1024> keys;
+    static constexpr size_t keys_size = 512;
+    std::vector<int> keys;
 
     GLfloat lastX = 0.0f, lastY = 0.0f, xChange = 0.0f, yChange = 0.0f; // mouse
     bool mouseFirstMoved = false;

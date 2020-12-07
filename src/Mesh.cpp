@@ -1,8 +1,8 @@
 #include "Mesh.h"
 
-Mesh::Mesh(GLfloat *vertices, GLuint *indices, unsigned int numOfVertices, unsigned int numOfIndices) {
-    indexCount = numOfIndices;
-
+Mesh::Mesh(GLfloat *vertices, GLuint *indices, GLsizei numOfVertices, GLsizei numOfIndices) :
+    indexCount{numOfIndices}
+{
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 

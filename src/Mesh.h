@@ -4,7 +4,7 @@
 
 class Mesh {
   public:
-    Mesh(GLfloat *vertices, GLuint *indices, unsigned int numOfVertices, unsigned int numOfIndices);
+    Mesh(GLfloat *vertices, GLuint *indices, GLsizei numOfVertices, GLsizei numOfIndices);
     ~Mesh();
     void renderMesh();
 

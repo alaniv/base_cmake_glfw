@@ -43,6 +43,7 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
 
 void Shader::use() { glUseProgram(shaderID); }
 
+/*
 void Shader::setBool(const std::string &name, bool value) const {
     glUniform1i(glGetUniformLocation(shaderID, name.c_str()), (int)value);
 }
@@ -54,6 +55,7 @@ void Shader::setInt(const std::string &name, int value) const {
 void Shader::setFloat(const std::string &name, float value) const {
     glUniform1f(glGetUniformLocation(shaderID, name.c_str()), value);
 }
+*/
 
 std::string Shader::readShaderFile(const char *path) {
     std::ifstream shaderFile;

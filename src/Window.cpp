@@ -14,13 +14,8 @@ void handleKeys(GLFWwindow *window, int key, int code, int action, int mode) {
         throw WindowError(std::string("handleKeys: glfwGetWindowUserPointer error."));
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
-    if (key >= 0 && key < 1024) {
-        if (action == GLFW_PRESS) {
-            mainWindow->keys[key] = true;
-        } else if (action == GLFW_RELEASE) {
-            mainWindow->keys[key] = false;
-        }
-    }
+    if (key >= 0 && key < mainWindow->keys_size)
+        mainWindow->keys[key] = action;
 }
 
 void handleMouse(GLFWwindow *window, double xPos, double yPos) {
@@ -40,16 +35,15 @@ void handleMouse(GLFWwindow *window, double xPos, double yPos) {
 
 void framebuffer_size_callback(GLFWwindow * /* window */, int width, int height) { glViewport(0, 0, width, height); }
 
-Window::Window(GLint wwindowWidth, GLint wwindowHeight) : windowWidth{wwindowWidth}, windowHeight{wwindowHeight} {
-    keys.fill(false);
+Window::Window(GLint wwindowWidth, GLint wwindowHeight)
+    : windowWidth{wwindowWidth}, windowHeight{wwindowHeight}, keys{std::vector<int>(keys_size, GLFW_RELEASE)} {
     if (!glfwInit())
         throw WindowError(std::string("glfwInit error."));
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // OS X
-#endif
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
     mainWindow = glfwCreateWindow(windowWidth, windowHeight, WINDOW_TITLE, nullptr, nullptr);
     if (mainWindow == nullptr)
         throw WindowError(std::string("glfwCreateWindow error."));

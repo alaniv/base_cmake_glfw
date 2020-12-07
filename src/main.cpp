@@ -4,67 +4,34 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "Window.h"
 #include "Camera.h"
-#include "Shader.h"
-#include "Mesh.h"
-
-#include <GLFW/glfw3.h>
-GLfloat deltaTime = 0.0f;
-GLfloat lastTime = 0.0f;
-
-Mesh *ourMesh;
-Shader *ourShader;
-
-void init() {
-    GLfloat vertices[] = {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f};
-    GLuint indices[] = {0, 3, 1, 1, 3, 2, 2, 3, 0, 0, 1, 2};
-
-    ourMesh = new Mesh(vertices, indices, 12, 12);
-    ourShader = new Shader("./media/triangles.vert", "./media/triangles.frag");
-    ourShader->use();
-}
-
-void display() {
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    ourMesh->renderMesh();
-    glFlush();
-}
+#include "DeltaTime.hpp"
+#include "BoxGameObject.hpp"
 
 int main(int /*argc*/, char ** /*argv*/) {
     Camera camera{glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f};
     Window window{};
-    init();
+    DeltaTime dt{};
+    BoxGameObject box{};
 
-    GLuint uniformProjection = ourShader->uniformProjection;
-    GLuint uniformModel = ourShader->uniformModel;
-    GLuint uniformView = ourShader->uniformView;
+    glm::mat4 projection = glm::perspective(45.0f, window.getAsepct(), 0.1f, 100.0f);
 
     while (!window.shouldClose()) {
-        GLfloat now = glfwGetTime();
-        deltaTime = now - lastTime;
-        lastTime = now;
-
-        camera.keyControl(window.getKeys(), deltaTime);
+        dt.tick();
+        camera.keyControl(window.getKeys(), dt);
         camera.mouseControl(window.getXChange(), window.getYChange());
 
         window.swapBuffers();
 
-        glm::mat4 model(1.0f);
-        const glm::mat4& view = camera.calculateViewMatrix();
-        glm::mat4 projection =
-            glm::perspective(45.0f, window.getBufferWidth() / window.getBufferHeight(), 0.1f, 100.0f);
+        const glm::mat4 &view = camera.calculateViewMatrix();
 
-        model = glm::translate(model, glm::vec3(0.2f, 0.2f, 0.2f));
+        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        box.render(projection, view);
+        glFlush();
 
-        glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-        display();
         window.pollEvents();
     }
     return 0;
