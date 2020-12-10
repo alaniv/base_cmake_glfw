@@ -61,3 +61,11 @@ add_executable(runUnitTests)
 target_sources(runUnitTests PRIVATE test/testExample.cpp)
 target_link_libraries(runUnitTests gtest gtest_main)
 #}
+
+#{ assimp settings
+set(ASSIMP_BUILD_TESTS OFF)
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
+set(ASSIMP_INSTALL_PDB OFF)
+add_subdirectory(thirdparty/assimp-master)
+target_link_libraries(myapp assimp)
+#}
